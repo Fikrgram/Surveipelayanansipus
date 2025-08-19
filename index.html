@@ -155,14 +155,21 @@ body {
   color: #2d3748;
 }
 
+
 .question-card {
-  background: #f8fafc;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #e0e7ff, #eef2ff);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 20px;
   padding: 30px;
-  margin-bottom: 24px;
-  border: 2px solid transparent;
+  box-shadow: 0 10px 20px rgba(99,102,241,0.08);
   transition: all 0.3s ease;
 }
+
+.question-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(99,102,241,0.15);
+}
+
 
 .question-card:hover {
   border-color: rgba(102,126,234,0.2);
@@ -176,13 +183,17 @@ body {
   color: #374151;
 }
 
+/* ENHANCED RATING CONTAINER */
 .rating-container {
   display: flex;
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+  perspective: 1000px;
+  position: relative;
 }
 
+/* Enhanced Rating Button Styles with Original Logic */
 .rating-button {
   width: 48px;
   height: 48px;
@@ -193,28 +204,130 @@ body {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
 }
 
+/* Ripple Effect */
+.rating-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.6s ease-out;
+  pointer-events: none;
+}
+
+/* Particle Effect */
+.rating-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.3) 1px, transparent 1px),
+    radial-gradient(circle at 40% 70%, rgba(255,255,255,0.2) 1px, transparent 1px);
+  background-size: 20px 20px, 25px 25px, 15px 15px;
+  opacity: 0;
+  transition: all 0.8s ease-out;
+  pointer-events: none;
+  animation: sparkle 3s infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: rotate(0deg); }
+  50% { opacity: 1; transform: rotate(180deg); }
+}
+
+/* Hover Effects */
 .rating-button:hover {
   border-color: #667eea;
   background: radial-gradient(circle at top left, #8b5cf6, #6366f1);
   color: white;
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 6px 15px rgba(102,126,234,0.4);
+  transform: scale(1.15) rotate(5deg) translateY(-5px);
+  box-shadow: 
+    0 15px 35px rgba(102,126,234,0.4),
+    0 0 30px rgba(102,126,234,0.3),
+    inset 0 2px 10px rgba(255,255,255,0.2);
+  z-index: 10;
 }
 
+.rating-button:hover::before {
+  width: 120px;
+  height: 120px;
+  animation: ripple 0.6s ease-out;
+}
+
+.rating-button:hover::after {
+  opacity: 0.8;
+  transform: rotate(360deg) scale(1.1);
+}
+
+@keyframes ripple {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 120px; height: 120px; opacity: 0; }
+}
+
+/* Active State - ORIGINAL LOGIC PRESERVED */
 .rating-button.active {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border-color: #6366f1;
   color: white;
   transform: scale(1.2);
   box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+  animation: activeGlow 2s infinite alternate;
 }
+
+@keyframes activeGlow {
+  0% { 
+    box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+  }
+  100% { 
+    box-shadow: 0 8px 30px rgba(99,102,241,0.7);
+  }
+}
+
+.rating-button.active::after {
+  opacity: 1;
+  animation: sparkle 1.5s infinite;
+}
+
+/* Click Animation */
+@keyframes clickPulse {
+  0% { transform: scale(1.2); }
+  50% { transform: scale(1.4) rotateY(180deg); }
+  100% { transform: scale(1.2); }
+}
+
+.rating-button.clicked {
+  animation: clickPulse 0.6s ease-out;
+}
+
+/* Color Variations for Different Values */
+.rating-button[data-value="1"]:hover { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.rating-button[data-value="2"]:hover { background: linear-gradient(135deg, #f97316, #ea580c); }
+.rating-button[data-value="3"]:hover { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.rating-button[data-value="4"]:hover { background: linear-gradient(135deg, #eab308, #ca8a04); }
+.rating-button[data-value="5"]:hover { background: linear-gradient(135deg, #84cc16, #65a30d); }
+.rating-button[data-value="6"]:hover { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.rating-button[data-value="7"]:hover { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.rating-button[data-value="8"]:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.rating-button[data-value="9"]:hover { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.rating-button[data-value="10"]:hover { background: linear-gradient(135deg, #ec4899, #db2777); }
 
 /* Navigation */
 .navigation {
@@ -393,6 +506,10 @@ body {
     font-size: 0.9rem;
   }
   
+  .rating-button:hover {
+    transform: scale(1.1) translateY(-2px);
+  }
+  
   .navigation {
     flex-direction: column-reverse;
     gap: 12px;
@@ -425,6 +542,58 @@ body {
 .hidden {
   display: none !important;
 }
+
+.question-card {
+  background: linear-gradient(135deg, #f9fafb, #eef2ff);
+  border: 1px solid rgba(102,126,234,0.2);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.question-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(102,126,234,0.15);
+}
+
+.rating-container {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 15px;
+  margin-top: 10px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.rating-button {
+  transition: all 0.25s ease-in-out;
+}
+
+.rating-button.active {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  border-color: #4f46e5;
+  box-shadow: 0 8px 20px rgba(79,70,229,0.4);
+  transform: scale(1.2);
+}
+
+
+/* Override style lama untuk kotak pertanyaan */
+.question-card {
+  background: linear-gradient(135deg, #e0e7ff, #eef2ff) !important;
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  border-radius: 20px !important;
+  padding: 30px !important;
+  box-shadow: 0 8px 20px rgba(99,102,241,0.12) !important;
+  transition: all 0.3s ease !important;
+}
+
+.question-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 15px 35px rgba(99,102,241,0.2) !important;
+}
+
 </style>
 </head>
 
@@ -436,7 +605,7 @@ body {
   <!-- Header -->
   <div class="header">
     <div class="container">
-      <div class="logo"><img src="Sipus.png" alt="Logo SIPUS" style="width:90px;height:90px;border-radius:70%;"></div>
+      <div class="logo"><img src="sipus.png" alt="Logo SIPUS" style="width:90px;height:90px;border-radius:70%;"></div>
       <h1 class="title">SIPUS</h1>
       <p class="subtitle">Survei Indeks Pelayanan Perpustakaan</p>
     </div>
@@ -548,15 +717,6 @@ function playSelesai() {
   }
 }
 
-// Mainkan klik saat tombol rating atau navigasi ditekan
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('rating-button') ||
-      e.target.id === 'nextBtn' ||
-      e.target.id === 'prevBtn') {
-    playKlik();
-  }
-});
-
 // Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCI_FrDaO-FuMeJvQxvACKqLJrsHI_tHWg",
@@ -638,7 +798,7 @@ const nextBtn = document.getElementById("nextBtn");
 const commentSection = document.getElementById("commentSection");
 const resultSection = document.getElementById("resultSection");
 
-// Initialize Survey
+// Initialize Survey - ORIGINAL LOGIC PRESERVED
 function renderStep(step) {
   const aspek = aspekList[step];
   
@@ -667,7 +827,7 @@ function renderStep(step) {
     `;
   });
   
-  // Add event listeners to rating buttons
+  // Add event listeners to rating buttons - ORIGINAL LOGIC
   document.querySelectorAll('.rating-button').forEach(button => {
     button.addEventListener('click', (e) => {
       const questionId = e.target.dataset.id;
@@ -675,11 +835,42 @@ function renderStep(step) {
       
       jawaban[questionId] = value;
       
+      // Add clicked animation
+      e.target.classList.add('clicked');
+      setTimeout(() => {
+        e.target.classList.remove('clicked');
+      }, 600);
+      
       // Update button states
       document.querySelectorAll(`[data-id="${questionId}"]`).forEach(btn => {
         btn.classList.remove('active');
       });
       e.target.classList.add('active');
+      
+      // Play click sound
+      playKlik();
+    });
+    
+    // Enhanced hover effects with magnetic field
+    button.addEventListener('mousemove', function(e) {
+      const rect = this.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = e.clientX - centerX;
+      const deltaY = e.clientY - centerY;
+      
+      this.style.transform = `
+        translate(${deltaX * 0.1}px, ${deltaY * 0.1}px) 
+        scale(1.15) 
+        rotate(5deg)
+        translateY(-5px)
+      `;
+    });
+    
+    button.addEventListener('mouseleave', function() {
+      if (!this.classList.contains('active')) {
+        this.style.transform = '';
+      }
     });
   });
   
@@ -696,7 +887,7 @@ function updateProgress() {
   document.getElementById('progressText').textContent = `Langkah ${currentStep + 1} dari ${aspekList.length}`;
 }
 
-// Navigation Events
+// Navigation Events - ORIGINAL LOGIC PRESERVED
 nextBtn.addEventListener('click', () => {
   if (currentStep < aspekList.length - 1) {
     currentStep++;
@@ -708,6 +899,7 @@ nextBtn.addEventListener('click', () => {
     document.querySelector('.progress-container').style.display = 'none';
     commentSection.classList.remove('hidden');
   }
+  playKlik();
 });
 
 prevBtn.addEventListener('click', () => {
@@ -715,9 +907,10 @@ prevBtn.addEventListener('click', () => {
     currentStep--;
     renderStep(currentStep);
   }
+  playKlik();
 });
 
-// Form Submission
+// Form Submission - ORIGINAL LOGIC PRESERVED
 document.getElementById('surveyForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -771,7 +964,7 @@ document.getElementById('surveyForm').addEventListener('submit', async (e) => {
   }
 });
 
-// Show Results Chart
+// Show Results Chart - ORIGINAL LOGIC PRESERVED
 function showResults(hasil) {
   const ctx = document.getElementById('resultChart').getContext('2d');
   new Chart(ctx, {
@@ -780,13 +973,7 @@ function showResults(hasil) {
       labels: aspekList.map(a => a.judul),
       datasets: [{
         data: hasil,
-        backgroundColor: [
-          '#667eea',
-          '#764ba2', 
-          '#f093fb',
-          '#f5576c',
-          '#4facfe'
-        ],
+        backgroundColor: ['#667eea','#764ba2','#f093fb','#f5576c','#4facfe'],
         borderWidth: 0
       }]
     },
@@ -795,64 +982,58 @@ function showResults(hasil) {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: {
-            padding: 20,
-            usePointStyle: true
-          }
+          labels: { padding: 20, usePointStyle: true }
         }
       }
     }
   });
 }
 
-// Load Welcome Statistics
+// Load Welcome Statistics (desktop only)
 async function loadWelcomeStats() {
   try {
     const snapshot = await database.ref('respon_survei').once('value');
     const data = snapshot.val();
-    
+    const totalEl = document.getElementById('totalResponden');
+    const avgEl = document.getElementById('avgRating');
+
     if (!data) {
-      document.getElementById('totalResponden').textContent = '0';
-      document.getElementById('avgRating').textContent = '-';
+      totalEl.textContent = '0';
+      avgEl.textContent = '-';
       return;
     }
     
     const responses = Object.values(data);
     const totalResponden = responses.length;
-    
-    // Calculate averages
-    const totals = [0, 0, 0, 0, 0];
-    responses.forEach(response => {
-      if (response.hasil) {
-        totals[0] += response.hasil.keramahan || 0;
-        totals[1] += response.hasil.fasilitas || 0;
-        totals[2] += response.hasil.koleksi || 0;
-        totals[3] += response.hasil.kebersihan || 0;
-        totals[4] += response.hasil.layanan || 0;
+    const totals = [0,0,0,0,0];
+    responses.forEach(r => {
+      if (r.hasil) {
+        totals[0] += r.hasil.keramahan || 0;
+        totals[1] += r.hasil.fasilitas || 0;
+        totals[2] += r.hasil.koleksi || 0;
+        totals[3] += r.hasil.kebersihan || 0;
+        totals[4] += r.hasil.layanan || 0;
       }
     });
-    
-    const averages = totals.map(total => Math.round(total / totalResponden));
-    const overallAvg = Math.round(averages.reduce((a, b) => a + b, 0) / 5);
-    
-    document.getElementById('totalResponden').textContent = totalResponden;
-    document.getElementById('avgRating').textContent = `${overallAvg}%`;
-    
-    // Create welcome chart
+    const averages = totals.map(t => Math.round(t / totalResponden));
+    const overallAvg = Math.round(averages.reduce((a,b)=>a+b,0)/5);
+    totalEl.textContent = totalResponden;
+    avgEl.textContent = overallAvg + '%';
+
     const ctx = document.getElementById('welcomeChart').getContext('2d');
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Keramahan', 'Fasilitas', 'Koleksi', 'Kebersihan', 'Layanan'],
+        labels: ['Keramahan','Fasilitas','Koleksi','Kebersihan','Layanan'],
         datasets: [{
           label: 'Rata-rata Kepuasan (%)',
           data: averages,
           backgroundColor: [
-            'rgba(102, 126, 234, 0.8)',
-            'rgba(118, 75, 162, 0.8)',
-            'rgba(240, 147, 251, 0.8)', 
-            'rgba(245, 87, 108, 0.8)',
-            'rgba(79, 172, 254, 0.8)'
+            'rgba(102,126,234,0.8)',
+            'rgba(118,75,162,0.8)',
+            'rgba(240,147,251,0.8)',
+            'rgba(245,87,108,0.8)',
+            'rgba(79,172,254,0.8)'
           ],
           borderRadius: 8,
           borderSkipped: false
@@ -860,38 +1041,27 @@ async function loadWelcomeStats() {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { display: false }
-        },
+        plugins: { legend: { display: false } },
         scales: {
-          y: { 
+          y: {
             beginAtZero: true,
             max: 100,
-            ticks: {
-              callback: function(value) {
-                return value + '%';
-              }
-            }
+            ticks: { callback: (v)=> v + '%' }
           }
         }
       }
     });
-    
-  } catch (error) {
-    console.error('Error loading stats:', error);
+  } catch (err) {
+    console.error('Error loading stats:', err);
   }
 }
 
-// Start Survey Function
 function mulaiSurvei() {
   document.getElementById('welcomeScreen').classList.add('hidden');
   document.getElementById('surveySection').classList.remove('hidden');
   renderStep(currentStep);
 }
 
-// Initialize
-
-// Deteksi apakah device adalah mobile
 function isMobileDevice() {
   return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -900,21 +1070,15 @@ window.addEventListener('DOMContentLoaded', () => {
   const statsContainer = document.getElementById('statsContainer');
   const chartContainer = document.querySelector('#welcomeScreen .chart-container');
   if (isMobileDevice()) {
-    // Sembunyikan statistik dan chart di mobile
     if (statsContainer) statsContainer.style.display = 'none';
     if (chartContainer) chartContainer.style.display = 'none';
   } else {
-    // Desktop -> tampilkan statistik dan chart
     if (statsContainer) statsContainer.style.display = 'grid';
     if (chartContainer) chartContainer.style.display = 'block';
+    loadWelcomeStats();
   }
 });
 
-window.addEventListener('load', () => {
-  loadWelcomeStats();
-  renderStep(currentStep);
-});
 </script>
-
 </body>
 </html>
