@@ -602,10 +602,25 @@ body {
 <audio id="klikSound" src="klik.mp3" preload="auto"></audio>
 <audio id="selesaiSound" src="selesai.mp3" preload="auto"></audio>
 
+<!-- Onboarding Popup -->
+<div id="onboardingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-2xl shadow-lg p-6 max-w-sm text-center animate-fadeIn">
+    <h2 class="text-xl font-bold mb-4 text-gray-800">📊 Panduan Penilaian</h2>
+    <p class="text-gray-600 mb-6">
+      Gunakan skala <b>1–10</b>:<br>
+      <b>1</b> = nilai terendah (sangat tidak puas)<br>
+      <b>10</b> = nilai tertinggi (sangat puas)
+    </p>
+    <button id="closeOnboarding" class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
+      Mengerti
+    </button>
+  </div>
+</div>
+
   <!-- Header -->
   <div class="header">
     <div class="container">
-      <div class="logo"><img src="Sipus.png" alt="Logo SIPUS" style="width:90px;height:90px;border-radius:70%;"></div>
+      <div class="logo"><img src="sipus.png" alt="Logo SIPUS" style="width:90px;height:90px;border-radius:70%;"></div>
       <h1 class="title">SIPUS</h1>
       <p class="subtitle">Survei Indeks Pelayanan Perpustakaan</p>
     </div>
@@ -733,58 +748,58 @@ const database = firebase.database();
 // Survey Data
 const aspekList = [
   { 
-    judul: "Keramahan Petugas", 
+    judul: "Keramahan Staf", 
     prefix: "keramahan", 
     pertanyaan: [
-      "Petugas menyambut dengan ramah",
-      "Petugas menjawab dengan sopan", 
-      "Petugas sigap membantu",
-      "Nyaman berinteraksi dengan petugas",
-      "Informasi dari petugas lengkap"
+      "Tingkat keramahan staf ketika menyambut pengunjung.",
+      "Sikap sopan santun staf dalam berinteraksi.",
+      "Senyuman atau sapaan staf kepada pengunjung.",
+      "Sikap staf yang membuat pengunjung merasa nyaman.",
+      "Konsistensi keramahan staf dari awal hingga akhir kunjungan."
     ] 
   },
   { 
-    judul: "Fasilitas Ruang Baca", 
+    judul: "Fasilitas", 
     prefix: "fasilitas", 
     pertanyaan: [
-      "Kursi dan meja nyaman",
-      "Pencahayaan cukup",
-      "Colokan listrik tersedia", 
-      "Area baca inklusif",
-      "Nyaman untuk waktu lama"
+      "Kenyamanan tempat membaca yang disediakan perpustakaan.",
+      "Kemudahaan akses area parkir bagi pengunjung.",
+      "Kondisi fasilitas pendukung seperti toilet atau mushola.",
+      "Kemudahan penggunaan fasilitas oleh pengunjung.",
+      "Kesesuaian fasilitas dengan kebutuhan pengunjung."
     ] 
   },
   { 
-    judul: "Koleksi Buku", 
+    judul: "Koleksi", 
     prefix: "koleksi", 
     pertanyaan: [
-      "Buku yang dicari tersedia",
-      "Koleksi selalu diperbarui",
-      "Penyusunan buku rapi",
-      "Kategori buku beragam", 
-      "Kondisi fisik buku baik"
+      "Daya tarik koleksi buku yang ditampilkan.",
+      "Keragaman koleksi yang tersedia.",
+      "Kesesuaian koleksi dengan harapan atau minat pengunjung.",
+      "Kejelasan informasi atau penjelasan yang menyertai koleksi.",
+      "Kondisi fisik koleksi (terawat, tertata, tidak rusak)."
     ] 
   },
   { 
-    judul: "Kebersihan dan Kenyamanan", 
+    judul: "Kebersihan", 
     prefix: "kebersihan", 
     pertanyaan: [
-      "Ruangan bersih dan terawat",
-      "Toilet bersih",
-      "Udara nyaman",
-      "Tempat sampah tersedia",
-      "Lingkungan mendukung belajar"
+      "Kebersihan area membaca untuk pemustaka.",
+      "Kebersihan toilet yang tersedia.",
+      "Kebersihan lantai, kaca, dan perabotan.",
+      "Penanganan sampah (ketersediaan tempat sampah, tidak penuh).",
+      "Kenyamanan udara dan lingkungan sekitar."
     ] 
   },
   { 
-    judul: "Proses Layanan", 
+    judul: "Layanan", 
     prefix: "layanan", 
     pertanyaan: [
-      "Peminjaman cepat dan mudah",
-      "Aturan dijelaskan jelas",
-      "Dapat notifikasi pengembalian",
-      "Pengembalian mudah",
-      "Sistem layanan online lancar"
+      "Kecepatan staf dalam merespons kebutuhan pengunjung.",
+      "Kejelasan informasi yang diberikan staf.",
+      "Perlakuan staf yang adil kepada semua pengunjung.",
+      "Kemampuan staf membantu menyelesaikan masalah atau pertanyaan.",
+      "Kepuasan pengunjung terhadap layanan secara keseluruhan."
     ] 
   }
 ];
